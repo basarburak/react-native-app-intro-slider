@@ -7,7 +7,6 @@ import {
   Text,
   TouchableOpacity,
   Platform,
-  StatusBar,
   I18nManager,
 } from 'react-native';
 import DefaultSlide from './DefaultSlide';
@@ -64,13 +63,6 @@ export default class AppIntroSlider extends React.Component {
       this.props.onSlideChange(this.state.activeIndex - 1, this.state.activeIndex);
   };
 
-  _onPaginationPress = (index) => {
-    const activeIndexBeforeChange = this.state.activeIndex;
-    this.goToSlide(index);
-    this.props.onSlideChange &&
-      this.props.onSlideChange(index, activeIndexBeforeChange);
-  };
-
   _renderItem = item => {
     const { width, height } = this.state;
     const props = { ...item.item, width, height };
@@ -79,8 +71,8 @@ export default class AppIntroSlider extends React.Component {
         {this.props.renderItem ? (
           this.props.renderItem(props)
         ) : (
-          <DefaultSlide bottomButton={this.props.bottomButton} {...props} />
-        )}
+            <DefaultSlide bottomButton={this.props.bottomButton} {...props} />
+          )}
       </View>
     );
   };
@@ -155,19 +147,7 @@ export default class AppIntroSlider extends React.Component {
     return (
       <View style={[styles.paginationContainer, this.props.paginationStyle]}>
         <View style={styles.paginationDots}>
-          {this.props.slides.length > 1 &&
-            this.props.slides.map((_, i) => (
-              <TouchableOpacity
-                key={i}
-                style={[
-                  styles.dot,
-                  this._rtlSafeIndex(i) === this.state.activeIndex
-                    ? this.props.activeDotStyle
-                    : this.props.dotStyle,
-                ]}
-                onPress={() => this._onPaginationPress(i)}
-              />
-            ))}
+          <Text>{this.state.activeIndex + 1 + '/' + this.props.slides.length}</Text>
         </View>
         {btn}
         {skipBtn}
@@ -257,10 +237,12 @@ const styles = StyleSheet.create({
     flexDirection: isAndroidRTL ? 'row-reverse' : 'row',
   },
   paginationContainer: {
-    position: 'absolute',
-    bottom: 16 + (isIphoneX ? 34 : 0),
-    left: 16,
-    right: 16,
+    // // position: 'absolute',
+    // bottom: 0 + (isIphoneX ? 34 : 0),
+    // left: 16,
+    flex: 0,
+    flexDirection: 'column',
+    // right: 16,
   },
   paginationDots: {
     height: 16,
